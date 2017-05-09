@@ -18,6 +18,10 @@ python setup.py install
 ```
 
 While there are a few other dependencies, installing Anaconda should get you a long way. Most things currently work under Python 2.7+ and Python 3.
+Dependency errors involving the ete2/3 package are fixed by installing PyQt4. If you use Anaconda run the following command:
+
+```conda install pyqt=4
+```
 
 Acknowledgements
 ------
