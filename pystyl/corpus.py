@@ -194,6 +194,36 @@ class Corpus:
             self.add_text(text=text, title=title, target_name=target_name)
 
 
+    def apply_to_untokenized_texts(self, func):
+        """
+        Applies a custom function to the untokenized texts.
+
+        Parameters
+        ----------
+        func : function
+            A function which has to accept a single argument,
+            a, str and must return a str.
+        """
+
+        for idx, text in enumerate(self.texts):
+            self.texts[idx] = func(text)
+
+    def apply_to_tokenized_texts(self, func):
+        """
+        Applies a custom function to tokenized texts.
+
+        Parameters
+        ----------
+        func : function
+            A function which has to accept a single argument,
+            a list of str, and must return a list of str.
+        """
+        if not self.tokenized_texts:
+            raise ValueError('Texts not tokenized yet.')
+
+        for idx, text in enumerate(self.tokenized_texts):
+            self.tokenized_texts[idx] = func(text)
+
     def preprocess(self, alpha_only=True, lowercase=True):
         """
         Preprocess the (untokenized) texts in the corpus.
@@ -302,10 +332,10 @@ class Corpus:
                 raise ValueError('No language set for corpus (cf. pronouns)')
             if self.language not in ('en', 'nl'):
                 raise ValueError('No pronouns available for: %s' %(self.language))
-            pronouns = {w.strip() for w in \
-                            resource_string(__name__,
-                                'pronouns/'+self.language+'.txt')\
-                            if not w.startswith('#')}
+            pronouns = {\
+                w.strip() for w in resource_string(__name__, 'pronouns/'+self.language+'.txt')\
+                if not w.startswith('#')\
+                }
         else:
             pronouns = set()
 
@@ -473,6 +503,7 @@ class Corpus:
             return len(self.texts)
         else:
             return 0
+
 
     def __repr__(self):
         """
