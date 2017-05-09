@@ -3,7 +3,10 @@ from __future__ import print_function
 
 import os
 import sys
-import StringIO
+try:
+    import StringIO
+except ImportError: #Python 3
+    from io import StringIO
 
 from sklearn.cluster import AgglomerativeClustering
 import matplotlib.pyplot as plt
